@@ -1,0 +1,168 @@
+
+local astar = require("main/astar/scripts/astar")
+local level = {}
+local level_cost = {}
+local enemies = {}
+local paths = {}
+local TILE_SIZE = 32
+local ZORDER_PATH = 0.5
+
+-- Takes a 1 based array index, creates a zero based 2d tile coordinate
+local function index_to_coords(index, width)
+    local x = math.floor((index-1) % width)
+    local y = math.floor((index-1) / width)
+    return x, y
+end
+
+-- Takes a zero based 2d tile coordinate, and the level width (tiles)
+-- Returns a 1 based array index 
+local function coords_to_index(x, y, width)
+    return y * width + x + 1
+end
+
+-- Takes a zero based 2d tile coordinate, returns a 2d screen coordinate
+local function coords_to_screen(x, y)
+    local scrx = TILE_SIZE * x + TILE_SIZE / 2
+    local scry = TILE_SIZE * y + TILE_SIZE / 2
+    return scrx, scry
+end
+
+-- Takes a 2d screen coordinate, returns a zero based 2d tile coordinate
+local function screen_to_coords(x, y)
+    return math.floor(x / TILE_SIZE), math.floor(y / TILE_SIZE)
+end
+
+-- 
+local function snap_screen_to_tile_center(x, y)
+    local snapped_x = math.floor(x / TILE_SIZE) * TILE_SIZE + TILE_SIZE / 2
+    local snapped_y = math.floor(y / TILE_SIZE) * TILE_SIZE + TILE_SIZE / 2
+    return snapped_x, snapped_y
+end
+
+local function generate_path(start, goal, level, width, height)
+    came_from, cost_so_far = astar.astar_grid( {width, height}, level, start, goal )
+    
+    
+    
+    local current = goal
+    while current ~= start do
+        if current == nil then
+            break
+        end
+
+        local lx, ly = index_to_coords(current, width)
+        local scrx, scry = coords_to_screen(lx, ly)
+        if current ~= goal then
+        	local pathitem = factory.create("#pathfactory", vmath.vector3(scrx, scry, ZORDER_PATH+0.05) )
+        	paths[current] = pathitem
+       	end
+        
+        local next = came_from[current]
+        local cost = cost_so_far[current]
+        --print(current, "->", next, cost)
+        current = next
+    end
+end
+
+function init(self)
+    msg.post("#", "acquire_input_focus")
+    
+    self.dragging = nil
+
+    local levelx, levely, w, h = tilemap.get_bounds("/level#tilemap")
+    self.level_size = vmath.vector3(w, h, 0)
+    
+    -- Maps tile source index to cost
+    -- All unspecified are "inifinite" cost
+    level_cost[1] = 1
+    
+    local count = 0
+    for ly = 0, h-1 do
+	    for lx = 0, w-1 do
+	        local tile = tilemap.get_tile("/level#tilemap", hash("ground"), lx+1, ly+1)
+	        local tilecost = level_cost[tile]
+	        if tilecost == nil then
+	           tile = 10000
+	        end
+	        
+            level[ly * w + lx + 1] = tile
+            count = count + 1
+	    end
+    end
+    
+    local start_screen = go.get_position("start")
+    local start_coord_x, start_coord_y = screen_to_coords(start_screen.x, start_screen.y)
+    self.coord_start = { start_coord_x, start_coord_y }
+    self.coord_start_index = coords_to_index(self.coord_start[1], self.coord_start[2], self.level_size.x)
+    local start_screen_x, start_screen_y = coords_to_screen(self.coord_start[1], self.coord_start[2])
+    go.set_position(vmath.vector3(start_screen_x, start_screen_y, 1), "start")
+    
+    local goal_screen = go.get_position("goal")
+    local goal_coord_x, goal_coord_y = screen_to_coords(goal_screen.x, goal_screen.y)
+    self.coord_goal = { goal_coord_x, goal_coord_y }
+    self.coord_goal_index = coords_to_index(self.coord_goal[1], self.coord_goal[2], self.level_size.x)
+    local goal_screen_x, goal_screen_y = coords_to_screen(self.coord_goal[1], self.coord_goal[2])
+    go.set_position(vmath.vector3(goal_screen_x, goal_screen_y, 1), "goal")
+	
+	local start = coords_to_index(self.coord_start[1], self.coord_start[2], self.level_size.x)
+	local goal = coords_to_index(self.coord_goal[1], self.coord_goal[2], self.level_size.x)
+	generate_path(start, goal, level, w, h)
+end
+
+
+function on_input(self, action_id, action)
+    if action_id == hash("touch") then
+        if self.dragging and action.released then
+            sprite.set_constant(self.dragging, "tint", vmath.vector4(1,1,1,1))
+            self.dragging = nil
+        end
+    
+        if self.dragging then
+            -- clamp it to the tile grid
+            local coord_x, coord_y = screen_to_coords(action.screen_x, action.screen_y)
+            
+            local snapped_x, snapped_y = snap_screen_to_tile_center(action.screen_x, action.screen_y)
+            local pos = go.get_position(self.dragging)
+            
+            if snapped_x ~= pos.x or snapped_y ~= pos.y then
+                -- snapping occured, recalc the path
+                if self.dragging == "start" then
+                	self.coord_start = { coord_x, coord_y }
+                	self.coord_start_index = coords_to_index(self.coord_start[1], self.coord_start[2], self.level_size.x)
+                else
+                	self.coord_goal = { coord_x, coord_y }
+                	self.coord_goal_index = coords_to_index(self.coord_goal[1], self.coord_goal[2], self.level_size.x)
+               	end
+                
+                -- delete all previous path items
+                go.delete_all(paths)
+                paths = {}
+                
+				local start = coords_to_index(self.coord_start[1], self.coord_start[2], self.level_size.x)
+				local goal = coords_to_index(self.coord_goal[1], self.coord_goal[2], self.level_size.x)
+                generate_path(start, goal, level, self.level_size.x, self.level_size.y)
+            end
+            
+            local screen_x, screen_y = coords_to_screen(coord_x, coord_y)
+            go.set_position(vmath.vector3(screen_x, screen_y, 0.9), self.dragging)
+            
+            return
+        end
+
+        if action.pressed then
+            local coord_x, coord_y = screen_to_coords(action.screen_x, action.screen_y)
+            local index = coords_to_index(coord_x, coord_y, self.level_size.x)
+            local target = nil
+            if index == self.coord_start_index then
+            	target = "start"
+            elseif index == self.coord_goal_index then
+            	target = "goal"
+            end
+            
+            if target ~= nil then
+                self.dragging = target
+                sprite.set_constant(self.dragging, "tint", vmath.vector4(0.5,0.5,0.5,1))
+            end
+        end
+    end
+end
