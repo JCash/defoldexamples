@@ -1,0 +1,15 @@
+images {
+  image: "/main/dialog/images/dialog_arrow.png"
+}
+images {
+  image: "/main/dialog/images/dialog_gradient.png"
+}
+images {
+  image: "/main/dialog/images/dialog_more.png"
+}
+images {
+  image: "/main/dialog/images/dialog_outline.png"
+}
+margin: 0
+extrude_borders: 0
+inner_padding: 0

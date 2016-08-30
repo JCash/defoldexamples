@@ -1,5 +1,7 @@
 # A*
 
+[Demo](https://jcash.github.io/demos/defold/astar/DefoldExamples/index.html)
+
 This is a first, very simple implementation of the A* algorithm.
 
 The example extracts the information from a tile map, and uses it

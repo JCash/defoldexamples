@@ -1,0 +1,49 @@
+local dialog = require('main/dialog/scripts/dialog')
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    msg.post("@render:", "zoom", {zoom = 0.5})
+
+    reset(self)
+end
+
+function reset(self)
+    if self.dialog ~= nil then
+        dialog.destroy(self.dialog)
+    end
+    
+    self.dialog = dialog.create({
+        text = {"Hi there!", "This is a simple dialog example",
+                "There are many ways to do this", "This is just one"},
+        
+        -- text properties
+        font = hash("dialog"),                  -- the font
+        leading = 1,                            -- the text leading
+        tracking = 0,                           -- the text tracking
+        width = 230,                            -- the maximum allowed size of the text node
+        
+        -- dialog properties
+        position = vmath.vector3(60, 240, 0),
+        padding = vmath.vector4(0, 0, 0, 0), -- extra padding around the text: left, top, right, bottom
+        
+        texture = hash("dialog"),               -- the atlas added to main.gui
+        background = hash("dialog_gradient"),   -- the background texture inside that atlas
+        arrow = hash("dialog_arrow"),           -- if it's a speech bubble, show the little speech direction arrow
+        more = hash("dialog_more"),             -- if #text > 1, show this icon between lines
+        outline = hash("dialog_outline"),       -- the slice9 texture inside that atlas
+        outline_radius = 16,                    -- The size you would set in the slice9 property
+        
+        icon_texture = hash("avatars"),         -- the texture containing the icon
+        icon_name = hash("hero"),               -- the icon to show
+        
+        })
+end
+
+function on_input(self, action_id, action)
+    if (action_id == hash("key_space") or action_id == hash("key_enter") or action_id == hash("touch")) and action.pressed then
+        if dialog.next(self.dialog) == false then
+            reset(self)
+        end
+    end
+end
+
