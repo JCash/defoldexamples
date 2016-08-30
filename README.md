@@ -2,8 +2,8 @@
 
 A small examples project to test code snippets
 
-* [A*](./astar/README.md)
-* [Dialog](./dialog/README.md)
+* [A*](./main/astar/README.md)
+* [Dialog](./main/dialog/README.md)
 
 # Credits
 
