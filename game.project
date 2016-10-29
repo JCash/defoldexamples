@@ -3,7 +3,7 @@ title = DefoldExamples
 version = 0.1
 
 [bootstrap]
-main_collection = /main/astar/main.collectionc
+main_collection = /main/window/window.collectionc
 
 [input]
 game_binding = /input/game.input_bindingc
