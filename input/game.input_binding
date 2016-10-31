@@ -14,11 +14,6 @@ key_trigger {
   input: KEY_RIGHT
   action: "move_right"
 }
-mouse_trigger {
-  input: MOUSE_BUTTON_1
-  action: "touch"
-}
-
 key_trigger {
   input: KEY_S
   action: "show"
@@ -26,4 +21,12 @@ key_trigger {
 key_trigger {
   input: KEY_H
   action: "hide"
+}
+key_trigger {
+  input: KEY_T
+  action: "title"
+}
+mouse_trigger {
+  input: MOUSE_BUTTON_1
+  action: "touch"
 }
