@@ -3,7 +3,7 @@ title = DefoldExamples
 version = 0.1
 
 [bootstrap]
-main_collection = /main/touch/touch.collectionc
+main_collection = /main/visibility/visibility.collectionc
 render = /main/render/custom.renderc
 
 [input]

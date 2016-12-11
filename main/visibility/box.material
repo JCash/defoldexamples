@@ -1,0 +1,34 @@
+name: "sprite"
+tags: "tile"
+vertex_program: "/main/visibility/box.vp"
+fragment_program: "/main/visibility/box.fp"
+vertex_constants {
+  name: "view_proj"
+  type: CONSTANT_TYPE_VIEWPROJ
+}
+vertex_constants {
+  name: "world"
+  type: CONSTANT_TYPE_WORLD
+}
+vertex_constants {
+  name: "p1"
+  type: CONSTANT_TYPE_USER
+}
+vertex_constants {
+  name: "p2"
+  type: CONSTANT_TYPE_USER
+}
+vertex_constants {
+  name: "center"
+  type: CONSTANT_TYPE_USER
+}
+fragment_constants {
+  name: "tint"
+  type: CONSTANT_TYPE_USER
+  value {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
