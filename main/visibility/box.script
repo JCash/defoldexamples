@@ -43,8 +43,8 @@ function update(self, dt)
     local p4 = vmath.vector4(1280, 500, 0, 0);
     
     go.set("#sprite", "center", vmath.vector4(pos.x, pos.y, 0, 0))
-    go.set("#sprite", "p1", vmath.vector4(p1.x, p1.y, p2.x, p2.y))
-    go.set("#sprite", "p2", vmath.vector4(p3.x, p3.y, p4.x, p4.y))
+    go.set("#sprite", "p1p2", vmath.vector4(p1.x, p1.y, p2.x, p2.y))
+    go.set("#sprite", "p3p4", vmath.vector4(p3.x, p3.y, p4.x, p4.y))
     
 end
 

@@ -11,11 +11,11 @@ vertex_constants {
   type: CONSTANT_TYPE_WORLD
 }
 vertex_constants {
-  name: "p1"
+  name: "p1p2"
   type: CONSTANT_TYPE_USER
 }
 vertex_constants {
-  name: "p2"
+  name: "p3p4"
   type: CONSTANT_TYPE_USER
 }
 vertex_constants {
