@@ -1,0 +1,41 @@
+uniform mediump mat4 view_proj;
+uniform mediump mat4 world;
+uniform mediump vec4 p1p2;
+uniform mediump vec4 p3p4;
+uniform mediump vec4 center;
+
+attribute mediump vec4 position;
+attribute mediump vec2 texcoord0;
+
+varying mediump vec2 var_texcoord0;
+
+
+void main()
+{
+    // Another way would be to use gl_VertexID, but it is not supported on OpenGLES 2,0
+    vec4 pos;
+    vec2 diff = position.xy - center.xy;
+    float z = position.z;
+    if( diff.x < 0.0 && diff.y > 0.0 )
+    {
+        pos = vec4(p1p2.xy, z, 1.0);
+    }
+    else if( diff.x > 0.0 && diff.y > 0.0 )
+    {
+        pos = vec4(p1p2.zw, z, 1.0);
+    }
+    else if( diff.x > 0.0 && diff.y < 0.0 )
+    {
+        pos = vec4(p3p4.xy, z, 1.0);
+    }
+    else if( diff.x < 0.0 && diff.y < 0.0 )
+    {
+        pos = vec4(p3p4.zw, z, 1.0);
+    }
+    
+    // NOTE: world isn't used here. Sprite positions are already transformed
+    // prior to rendering but the world-transform is set for sorting.
+    gl_Position = view_proj * pos;
+    
+    var_texcoord0 = texcoord0;
+}

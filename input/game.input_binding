@@ -26,7 +26,19 @@ key_trigger {
   input: KEY_T
   action: "title"
 }
+key_trigger {
+  input: KEY_ENTER
+  action: "key_enter"
+}
+key_trigger {
+  input: KEY_SPACE
+  action: "key_space"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
+  action: "touch"
+}
+touch_trigger {
+  input: TOUCH_MULTI
   action: "touch"
 }

@@ -1,0 +1,52 @@
+local box_points = { vmath.vector3(-1, 1, 0),
+                     vmath.vector3( 1, 1, 0),
+                     vmath.vector3( 1,-1, 0),
+                     vmath.vector3(-1,-1, 0) }
+
+go.property("p1", vmath.vector3(-1, 1, 0))
+go.property("p2", vmath.vector3( 1, 1, 0))
+go.property("p3", vmath.vector3( 1,-1, 0))
+go.property("p4", vmath.vector3(-1,-1, 0))
+
+local function debug_draw(self)
+    msg.post("@render:", "draw_line", {start_point=self.p1, end_point=self.p2, color=vmath.vector4(1,1,0,1)})
+    msg.post("@render:", "draw_line", {start_point=self.p2, end_point=self.p3, color=vmath.vector4(1,1,0,1)})
+    msg.post("@render:", "draw_line", {start_point=self.p3, end_point=self.p4, color=vmath.vector4(1,1,0,1)})
+    msg.post("@render:", "draw_line", {start_point=self.p4, end_point=self.p1, color=vmath.vector4(1,1,0,1)})
+end
+
+local function update_points(self)
+    local pos = go.get_position()
+    local size = go.get("#sprite", "size") * 0.5
+    self.p1 = vmath.vector3(box_points[1].x * size.x, box_points[1].y * size.y, 0) + pos
+    self.p2 = vmath.vector3(box_points[2].x * size.x, box_points[2].y * size.y, 0) + pos
+    self.p3 = vmath.vector3(box_points[3].x * size.x, box_points[3].y * size.y, 0) + pos
+    self.p4 = vmath.vector3(box_points[4].x * size.x, box_points[4].y * size.y, 0) + pos
+end
+
+function init(self)
+    self.points = {}
+    print(size)
+    update_points(self)
+end
+
+
+function update(self, dt)
+    debug_draw(self)
+
+    local pos = go.get_position()
+
+    -- let's pretend the light source is in the bottom left corner :)
+    local p1 = self.p3;
+    local p2 = self.p1;
+    local p3 = vmath.vector4(1280, 1024, 0, 0);
+    local p4 = vmath.vector4(1280, 500, 0, 0);
+    
+    go.set("#sprite", "center", vmath.vector4(pos.x, pos.y, 0, 0))
+    go.set("#sprite", "p1p2", vmath.vector4(p1.x, p1.y, p2.x, p2.y))
+    go.set("#sprite", "p3p4", vmath.vector4(p3.x, p3.y, p4.x, p4.y))
+    
+end
+
+function on_message(self, message_id, message, sender)
+end

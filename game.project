@@ -3,18 +3,25 @@ title = DefoldExamples
 version = 0.1
 
 [bootstrap]
-main_collection = /main/window/window.collectionc
+main_collection = /main/visibility/visibility.collectionc
+render = /main/render/custom.renderc
 
 [input]
 game_binding = /input/game.input_bindingc
+repeat_delay = 0.01
+repeat_interval = 0.01
 
 [display]
-width = 800
-height = 600
+width = 1024
+height = 768
 
 [physics]
 scale = 0.02
 
 [script]
 shared_state = 1
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
 

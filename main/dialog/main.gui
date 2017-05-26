@@ -1,0 +1,62 @@
+script: "/main/dialog/main.gui_script"
+fonts {
+  name: "dialog"
+  font: "/main/font/dialog.font"
+}
+textures {
+  name: "dialog"
+  texture: "/main/dialog/images/dialog.atlas"
+}
+textures {
+  name: "avatars"
+  texture: "/main/dialog/images/avatars.atlas"
+}
+background_color {
+  w: 1.0
+}
+nodes {
+  position {
+    x: 199.31477
+    y: 30.06424
+    w: 1.0
+  }
+  rotation {
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 300.0
+    y: 100.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  text: "Press Enter/Space"
+  font: "dialog"
+  id: "text"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+adjust_reference: ADJUST_REFERENCE_PARENT
