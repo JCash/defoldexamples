@@ -15,6 +15,7 @@ local pixels_per_meter = 8
 function M.init_particles(num, _width, _height)
     num_particles = num
     particles = {}
+    velocities = {}
     width = _width
     height = _height
     
