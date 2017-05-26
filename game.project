@@ -3,7 +3,7 @@ title = DefoldExamples
 version = 0.1
 
 [bootstrap]
-main_collection = /main/visibility/visibility.collectionc
+main_collection = /main/bufferparticles/bufferparticles.collectionc
 render = /main/render/custom.renderc
 
 [input]
