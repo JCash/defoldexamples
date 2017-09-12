@@ -66,6 +66,8 @@ end
 
 function init(self)
     msg.post("#", "acquire_input_focus")
+    msg.post("@render:", "zoom", {zoom = 1})
+    msg.post("@render:", "disable_stencil_mask")
     
     self.dragging = nil
 

@@ -40,5 +40,5 @@ mouse_trigger {
 }
 touch_trigger {
   input: TOUCH_MULTI
-  action: "touch"
+  action: "touchmulti"
 }
